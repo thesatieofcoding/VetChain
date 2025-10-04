@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { dynamic } from "next/dynamic"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -16,7 +17,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function LoginPage() {
+function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -151,3 +152,5 @@ export default function LoginPage() {
     </div>
   )
 }
+
+export default dynamic(() => Promise.resolve(LoginPage), { ssr: false })

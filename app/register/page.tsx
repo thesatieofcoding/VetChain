@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { dynamic } from "next/dynamic"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -16,7 +17,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function RegisterPage() {
+function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -215,3 +216,5 @@ export default function RegisterPage() {
     </div>
   )
 }
+
+export default dynamic(() => Promise.resolve(RegisterPage), { ssr: false })
