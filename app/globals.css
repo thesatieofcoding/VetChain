@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Updated to cream background and aqua green primary colors */
+    --background: 45 23% 97%; /* Cream white background */
+    --foreground: 0 0% 3.9%;
+    --card: 45 23% 99%; /* Slightly lighter cream for cards */
+    --card-foreground: 0 0% 3.9%;
+    --popover: 45 23% 99%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 174 72% 56%; /* Aqua green for buttons */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 45 15% 92%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 45 15% 92%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 46 87% 65%; /* Warm amber for hope and warmth */
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 45 15% 87%;
+    --input: 45 15% 87%;
+    --ring: 174 72% 56%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 174 72% 56%; /* Keep aqua green in dark mode */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 46 87% 65%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 174 72% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added dark grid pattern background for sophisticated look */
+.grid-pattern {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
