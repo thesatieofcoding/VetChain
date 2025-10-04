@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Heart, Globe, User, Menu, X, Wallet, Mail, DollarSign, Building2, PawPrint, Sun, Moon } from "lucide-react"
+import { Heart, Globe, User, Menu, X, Wallet, Mail, DollarSign, Building2, PawPrint, Sun, Moon, LogOut } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { useLanguage } from "@/contexts/language-context"
+import { useSimulatedAuth } from "@/hooks/use-simulated-auth"
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -15,6 +16,7 @@ export default function Header() {
   const [theme, setTheme] = useState("light")
 
   const { language, setLanguage, t } = useLanguage()
+  const { user, logout } = useSimulatedAuth()
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light"
@@ -105,12 +107,39 @@ export default function Header() {
               <span className="sr-only">{t("wallet")}</span>
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" className="relative" asChild>
-            <Link href="/login">
-              <User className="h-5 w-5" />
-              <span className="sr-only">{t("signIn")}</span>
-            </Link>
-          </Button>
+          
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">User Menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem disabled>
+                  {user.firstName} {user.lastName}
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  {user.email}
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="ghost" size="icon" className="relative" asChild>
+              <Link href="/login">
+                <User className="h-5 w-5" />
+                <span className="sr-only">{t("signIn")}</span>
+              </Link>
+            </Button>
+          )}
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             <span className="sr-only">{t("menu")}</span>

@@ -1,15 +1,13 @@
 "use client"
 
 import type React from "react"
-import dynamic from "next/dynamic"
-
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
+import { useSimulatedAuth } from "@/hooks/use-simulated-auth"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,13 +15,13 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-function LoginPage() {
+export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { login } = useAuth()
+  const { login } = useSimulatedAuth()
   const { t } = useLanguage()
   const router = useRouter()
 
@@ -152,5 +150,3 @@ function LoginPage() {
     </div>
   )
 }
-
-export default dynamic(() => Promise.resolve(LoginPage), { ssr: false })

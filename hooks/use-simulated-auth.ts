@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 interface User {
@@ -11,22 +11,12 @@ interface User {
   createdAt: string
 }
 
-interface AuthContextType {
-  user: User | null
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => Promise<{ success: boolean; error?: string }>
-  logout: () => void
-  isLoading: boolean
+interface AuthResult {
+  success: boolean
+  error?: string
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function useSimulatedAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
@@ -45,7 +35,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string,
     firstName: string,
     lastName: string,
-  ): Promise<{ success: boolean; error?: string }> => {
+  ): Promise<AuthResult> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
     // Validate inputs
     if (!email || !password || !firstName || !lastName) {
       return { success: false, error: "All fields are required" }
@@ -55,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: "Password must be at least 8 characters" }
     }
 
-    // Check if user already exists
+    // Check if user already exists (simulate)
     const users = JSON.parse(localStorage.getItem("vetchain_users") || "[]")
     const existingUser = users.find((u: any) => u.email === email)
 
@@ -72,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       createdAt: new Date().toISOString(),
     }
 
-    // Store password separately (in real app, this would be hashed on backend)
+    // Store user data
     const userWithPassword = { ...newUser, password }
     users.push(userWithPassword)
     localStorage.setItem("vetchain_users", JSON.stringify(users))
@@ -84,7 +77,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { success: true }
   }
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, password: string): Promise<AuthResult> => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
     // Validate inputs
     if (!email || !password) {
       return { success: false, error: "Email and password are required" }
@@ -112,13 +108,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/")
   }
 
-  return <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+  return {
+    user,
+    login,
+    register,
+    logout,
+    isLoading,
   }
-  return context
 }
